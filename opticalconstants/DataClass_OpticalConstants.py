@@ -106,6 +106,13 @@ class OpticalConstants(SQLData):
 				self.ocExists = True
 
 
+	def wavelengthRange(self):
+		print("")
+
+	def wavelengthResolution(self):
+		print("")
+
+		
 	# ^^^^^^^^^^^^^^^
 	# Check if the optical constants exist
 	#
