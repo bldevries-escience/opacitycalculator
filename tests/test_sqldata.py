@@ -46,6 +46,7 @@ def test_external_db():
 
     assert worked
 
+# NEEDS IMPLEMENTING
 def test_db_does_not_exist():
     db="unknown.db"
     try:
@@ -56,3 +57,8 @@ def test_db_does_not_exist():
         worked= (len(oc1.wavelength) != 0)
     except:
         worked=False
+
+    assert False
+
+def db_force_generation_new_db_file():
+    assert False

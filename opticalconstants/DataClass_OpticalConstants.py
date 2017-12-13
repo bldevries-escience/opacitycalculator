@@ -117,6 +117,34 @@ class OpticalConstants(SQLData):
 	def wavelengthResolution(self):
 		print("")
 
+	def print(self):
+		items = [("Label: ",self.label),
+				 ("Type: ", self.type),
+				 ("Information: ", self.info),
+				 ("Composition: ", self.composition),
+				 ("Reference: ", self.reference),
+				 ("DOI: ", self.doi),
+				 ("Mineral: ", self.mineral),
+				 ("Keywords: ", self.keywords),
+				 ("Lattice structure: ", self.lattice),
+				 ("Density: ", self.rho),
+				 ("Units: ", self.u_rho),
+				 ("Temperature: ", self.temperature),
+				 ("Units: ", self.u_temperature),
+#				 ("Wavelength: ", self.wavelength),
+#				 ("N1: ", self.N1),
+#				 ("N2: ", self.N2),
+#				 ("N3: ", self.N3),
+#				 ("K1: ", self.K1),
+#				 ("K2: ", self.K2),
+#				 ("K3: ", self.K3),
+				]
+
+		for i in items:
+			print("{:<20}{}".format(i[0], i[1]))
+
+
+
 		
 	# ^^^^^^^^^^^^^^^
 	# Check if the optical constants exist
