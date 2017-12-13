@@ -14,8 +14,6 @@ import sqlite3 as lite
 import io
 import pkg_resources
 
-#from DataClass_Data import Data
-#from sqlite_model import *
 from .SQLData import SQLData
 
 
@@ -29,13 +27,18 @@ This class inherits functions and variables from the SQLData class. See that cla
 additional information.
 """
 class OpticalConstants(SQLData):	
-	
-	SQLITE_NK_DB_FILE_PATH = pkg_resources.resource_filename(__name__, 'SQLITE_NK_DATABASE.db')
 
 	# ^^^^^^^^^^^^^^^
 	# Constructor
 	#
-	def __init__(self, **kargs):
+	def __init__(self,  SQLITE_NK_DB_FILE_PATH=None, **kargs):
+
+		if SQLITE_NK_DB_FILE_PATH is None:
+			self.SQLITE_NK_DB_FILE_PATH = pkg_resources.resource_filename(
+											__name__, 
+											'SQLITE_NK_DATABASE.db')
+		else:
+			self.SQLITE_NK_DB_FILE_PATH = SQLITE_NK_DB_FILE_PATH
 
 		self.ocExists = False
 
@@ -48,6 +51,7 @@ class OpticalConstants(SQLData):
 		self.info 			= None
 		self.composition	= None
 		self.reference 		= None
+		self.doi			= None
 		self.mineral		= None
 		self.keywords		= None
 		self.lattice 		= None
@@ -71,11 +75,12 @@ class OpticalConstants(SQLData):
 											"mineral":"",\
 											"keywords":[],\
 											"reference": "", \
+											"doi": "",\
 											"lattice": "", \
 											"rho": -1,\
-											"u_rho":"gr/cm^3",\
+											"u_rho":"",\
 											"temperature": 300,\
-											"u_temperature": "Kelvin",\
+											"u_temperature": "",\
 											"wavelength": np.array([]),\
 											"N1":np.array([]),\
 											"N2":np.array([]),\
@@ -87,7 +92,7 @@ class OpticalConstants(SQLData):
 
 
 		# Exclude variables from being stored in the database
-		self.exclude_variables_from_database.extend(["ocExists", self.SQLITE_NK_DB_FILE_PATH])
+		self.exclude_variables_from_database.extend(["ocExists", "SQLITE_NK_DB_FILE_PATH"])
 
 		# Search in the kargs for variables to search content with
 		# First get the names of all variables stored in the database (function from the SQLite model)		
