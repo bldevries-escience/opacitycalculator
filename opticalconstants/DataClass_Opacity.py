@@ -44,71 +44,47 @@ class Opacity(SQLData):
 	# ^^^^^^^^^^^^^^^
 	# Constructor
 	#
-	def __init__(self, SQLITE_DB_FILE_PATH, **kargs):
+	def __init__(self, SQLITE_DB_FILE_PATH, \
+					optical_constants, \
+					grain_size, grain_shape, \
+					**kargs):
+	
+		self.opac_exists = False
 		
-		self.oc_exists = False
-		#self.mixing = False
-		#self.use_slope = False
-
 		super(Opacity, self).__init__(SQLITE_DB_FILE_PATH)
-		#self.SQLITE_DB_FILE_PATH = SQLITE_DB_FILE_PATH
 		
-		# COMPOSITION PARAMETERS
-		self.labels						= []
-		self.grain_porosity				= 0
+		# GRAIN PARAMETERS
+		self.optical_constants			= optical_constants
+		self.wavelength 				= self.optical_constants.wavelength
+		self.label						= self.optical_constants.label
 
-		# PARTICLE SHAPE PARAMETERS
-		self.grain_shape 				= ""
+		self.grain_shape 				= grain_shape
+		self.grain_size 				= grain_size
+
 		self.grain_filling_factor_DHS	= -1.0
-
-		# PARTICLE SIZE PARAMETERS
-		self.grain_size_start 			= -1.0
-		self.grain_size_end 			= -1.0
-		self.grain_size_slope			= -9999999.0
-		self.grain_size_steps_per_micron= -1.0
-		
+		self.grain_porosity				= 0 #?????
+		self.porosity_method			= ""
 		
 		#self.grain_temperature 			= None
 
-		# WAVELENGTH GRID PARAMETERS
-		self.w_start					= -1.0
-		self.w_end						= -1.0
-		self.w_steps_per_micron			= -1.0
-		self.w_extrapolate				= -1.0 # !! Need to make these boolean, need to implement this at SQLData level
-		self.w_interpolate				= -1.0
-
 		# RESULTS
-		self.optical_constants			= [] #!
-		self.wavelength 				= np.array([])
-		self.grain_size_distribution_s	= np.array([]) # Size grid
-		self.grain_size_distribution_p	= np.array([]) # Size probability
 		self.o_sca 						= np.array([])
 		self.o_abs 						= np.array([])
 
-
 		# Set default values
-		self.default_variable_values.update({"labels": 						[], \
+		self.default_variable_values.update({"label": 						"", \
 											"grain_porosity":				0,\
+											"porosity_method": 				"",\
 											"grain_shape": 					"", \
 											"grain_filling_factor_DHS": 	-1.0,\
-											"grain_size_start": 			-1.0, \
-											"grain_size_end": 				-1.0, \
-											"grain_size_slope": 			-9999999.0, \
-											"grain_size_steps_per_micron": 	-1.0,\
-											"w_start":						-1.0,\
-											"w_end":						-1.0,\
-											"w_steps_per_micron":			-1.0,\
-											"w_extrapolate":				"none",\
-											"w_interpolate":				"none",\
+											"grain_size":		 			-1.0, \
 											"wavelength":					np.array([]),\
-											"grain_size_distribution_s":	np.array([]),\
-											"grain_size_distribution_p":	np.array([]),\
 											"o_sca":						np.array([]),\
 											"o_abs":						np.array([]),\
 											})
 		
 		self.exclude_variables_from_database.extend([	"optical_constants",\
-														"oc_exists", \
+														"opac_exists", \
 														"POSSIBLE_GRAIN_SHAPES", \
 													])
 
@@ -125,14 +101,8 @@ class Opacity(SQLData):
 		if search:
 			nr_found = self.search()
 			if nr_found > 0:
-				self.oc_exists = True
+				self.opac_exists = True
 
-		for label in self.labels:
-			oc = OpticalConstants(label = label)
-			if oc.ocExists:
-				self.optical_constants.append(oc)
-			else:
-				warnings.warn("For this label no optical constants were found: {}".format(label))
 
 	def process(self):
 		
@@ -219,5 +189,6 @@ class Opacity(SQLData):
 		return self.o_sca
 
 
-
+	def exists(self):
+		return self.opac_exists
 
