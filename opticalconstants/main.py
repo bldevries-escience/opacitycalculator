@@ -4,6 +4,7 @@ import os
 import pkg_resources
 
 from .DataClass_OpticalConstants import *
+from .DataClass_Opacity import *
 # from DataClass_Opacity import *
 
 SQLITE_DB_FILE_PATH = pkg_resources.resource_filename(__name__,
