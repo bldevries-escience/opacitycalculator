@@ -344,16 +344,25 @@ class SQLData(object):
 
         return nr_found
 
-
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # This is not the fasterst way, but a clear way
     def search_label(self, term):
         labels = []
-        labels += self.getColumnInTable(select="label", where={"info": term}, use_like=True)
-        labels += self.getColumnInTable(select="label", where={"reference": term}, use_like=True)
-        labels += self.getColumnInTable(select="label", where={"type": term}, use_like=True)
-        labels += self.getColumnInTable(select="label", where={"mineral": term}, use_like=True)
-        labels += self.getColumnInTable(select="label", where={"keywords": term}, use_like=True)
+        labels += self.getColumnInTable(select="label",
+                                        where={"info": term},
+                                        use_like=True)
+        labels += self.getColumnInTable(select="label",
+                                        where={"reference": term},
+                                        use_like=True)
+        labels += self.getColumnInTable(select="label",
+                                        where={"type": term},
+                                        use_like=True)
+        labels += self.getColumnInTable(select="label",
+                                        where={"mineral": term},
+                                        use_like=True)
+        labels += self.getColumnInTable(select="label",
+                                        where={"keywords": term},
+                                        use_like=True)
 
         unique = []
         for l in labels:
