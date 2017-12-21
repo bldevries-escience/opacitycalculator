@@ -63,6 +63,8 @@ class OpticalConstants(SQLData):
         self.temperature = None
         self.u_temperature = None
         self.wavelength = None
+        self.u_wavelength = None
+        self.wavelength_grid = None
         self.N1 = None
         self.N2 = None
         self.N3 = None
@@ -82,9 +84,11 @@ class OpticalConstants(SQLData):
                                              "lattice": "",
                                              "rho": -1,
                                              "u_rho": "",
-                                             "temperature": 300,
+                                             "temperature": -1,
                                              "u_temperature": "",
                                              "wavelength": np.array([]),
+                                             "u_wavelength": "unknown",
+                                             "wavelength_grid": "unknown",
                                              "N1": np.array([]),
                                              "N2": np.array([]),
                                              "N3": np.array([]),
@@ -121,33 +125,65 @@ class OpticalConstants(SQLData):
         print("")
 
     def wavelengthResolution(self):
-        print("")
+        dw = []
+        for i in range(len(self.wavelength)-1):
+            dw.append(round(self.wavelength[i+1]-self.wavelength[i], 3))
+
+        if len(dw) != 0:
+            variable = not dw.count(dw[0]) == len(dw)
+        else:
+            variable = False
+
+        av = np.average(dw)
+        dev = np.std(dw)
+
+        return av, variable, dev
 
     def print(self):
+        if self.wavelength_grid == "lin":
+            res, var, dev = self.wavelengthResolution()
+            grid_info = self.wavelength_grid + ", resolution: " + \
+                str(round(res, 3))
+        elif self.wavelength_grid == "log":
+            start = round(self.wavelength[1]-self.wavelength[0], 5)
+            end = round(self.wavelength[-1]-self.wavelength[-2], 5)
+            grid_info = self.wavelength_grid+", start/end resolution: " + \
+                str(start)+"/"+str(end)
+        else:
+            res, var, dev = self.wavelengthResolution()
+            grid_info = "unknown"+", average resolution/stdev: " + \
+                        str(round(res), 3)+"+/-"+str(round(dev), 3)
+
+        start, end = self.wavelength[0], self.wavelength[-1]
+        if self.lattice == "c":
+            lat = "crystalline"
+        elif self.lattice == "a":
+            lat = "amorphous"
+        else:
+            lat = self.lattice
+
         items = [("Label: ", self.label),
-                 ("Type: ", self.type),
                  ("Information: ", self.info),
-                 ("Composition: ", self.composition),
-                 ("Reference: ", self.reference),
-                 ("DOI: ", self.doi),
-                 ("Mineral: ", self.mineral),
                  ("Keywords: ", self.keywords),
-                 ("Lattice structure: ", self.lattice),
+                 ("Type: ", self.type),
+                 ("Lattice structure: ", lat),
+                 ("Mineral: ", self.mineral),
+                 ("Composition: ", self.composition),
                  ("Density: ", self.rho),
                  ("Units: ", self.u_rho),
                  ("Temperature: ", self.temperature),
                  ("Units: ", self.u_temperature),
-                 #                ("Wavelength: ", self.wavelength),
-                 #                ("N1: ", self.N1),
-                 #                ("N2: ", self.N2),
-                 #                ("N3: ", self.N3),
-                 #                ("K1: ", self.K1),
-                 #                ("K2: ", self.K2),
-                 #                ("K3: ", self.K3),
+                 ("Units wavelength grid: ", self.u_wavelength),
+                 ("Wavelength start/end: ", str(start)+", "+str(end)),
+                 ("Wavelength grid: ", grid_info),
+                 ("Reference: ", self.reference),
+                 ("DOI: ", self.doi),
                  ]
 
+        print()
         for i in items:
-            print("{:<20}{}".format(i[0], i[1]))
+            print("{:<25}{}".format(i[0], i[1]))
+        print()
 
     # ^^^^^^^^^^^^^^^
     # Check if the optical constants exist
