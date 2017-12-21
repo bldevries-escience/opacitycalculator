@@ -1,2 +1,2 @@
 include README.rst
-include opticalconstants/SQLITE_DATABASE.db
+include opacitycalculator/SQLITE_DATABASE.db

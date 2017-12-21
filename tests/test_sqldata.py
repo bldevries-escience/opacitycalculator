@@ -1,5 +1,5 @@
 import os
-import opticalconstants as oc
+import opacitycalculator as oc
 # import matplotlib.pyplot as plt
 
 
@@ -47,18 +47,18 @@ def test_external_db():
     assert worked
 
 # NEEDS IMPLEMENTING
-def test_db_does_not_exist():
-    db="unknown.db"
-    try:
-        oc1 = oc.OpticalConstants(SQLITE_NK_DB_FILE_PATH=db)
-        oc1.label=label
-        oc1.search()
+# def test_db_does_not_exist():
+#     db="unknown.db"
+#     try:
+#         oc1 = oc.OpticalConstants(SQLITE_NK_DB_FILE_PATH=db)
+#         oc1.label=label
+#         oc1.search()
 
-        worked= (len(oc1.wavelength) != 0)
-    except:
-        worked=False
+#         worked= (len(oc1.wavelength) != 0)
+#     except:
+#         worked=False
 
-    assert False
+#     assert False
 
-def db_force_generation_new_db_file():
-    assert False
+# def db_force_generation_new_db_file():
+#     assert False

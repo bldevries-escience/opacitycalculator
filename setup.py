@@ -6,10 +6,9 @@ def readme():
         return f.read()
 
 
-setup(name='opticalconstants',
-      version='0.1',
-      description=    'Database of optical constants (refractive indices) \
-                  of minerals',
+setup(name= 'opacitycalculator',
+      version= '0.1',
+      description= '',
       long_description=readme(  ),
       # classifiers=[
       #   'Development Status :: under developement',
@@ -22,9 +21,9 @@ setup(name='opticalconstants',
       author='B.L. de Vries',
       author_email='',
       license='',
-      packages=['opticalconstants'],
+      packages=['opacitycalculator'],
       package_data={
-          'opticalconstants': ['SQLITE_NK_DATABASE.db'],
+          'opacitycalculator': ['SQLITE_NK_DATABASE.db'],
       },
       # install_requires=[
       #     'markdown',
